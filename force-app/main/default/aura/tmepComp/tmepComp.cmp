@@ -1,0 +1,4 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" access="global" >
+    <aura:attribute name="EmplyeeName" type="String"/>
+    <p>{!v.EmplyeeName}</p>
+</aura:component>
