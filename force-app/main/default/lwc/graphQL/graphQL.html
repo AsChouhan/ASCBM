@@ -1,0 +1,11 @@
+<template>
+    <lightning-card variant="Narrow" title="GraphQL With LWC" icon-name="standard: account">   
+    <template lwc:if={graphql.data}>
+            <div class="slds-var-m-around_medium">
+                <template for:each={Contacts} for:item="contact">
+                    <p key={contact.Id}>{contact.Name}</p>
+                </template>
+            </div>
+        </template>
+    </lightning-card>
+</template>

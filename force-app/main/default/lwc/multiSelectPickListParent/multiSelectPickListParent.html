@@ -1,0 +1,25 @@
+<template>
+    <div class="slds-tabs_card">
+        <div class="slds-page-header">
+            <lightning-card>
+                <lightning-combobox  name="ObjectList" label='Select Object' 
+                onchange={onObjectChange} options={objectList} placeholder="Select Object">
+            </lightning-combobox>
+            <br/>
+            {ToggleButton} <lightning-input type="toggle" lable="logglelable" name="toggle" onchange={togglechange} ></lightning-input>
+        </lightning-card>
+        </div>
+    </div> <br/>
+    <template if:false={togglebutton}>
+    <lightning-card  variant="Narrow"  title="Pick List" if:true={options}>
+       <div class="slds-p-horizontal_small">
+            <c-multi-select-pick-list onselectoption={handleSelectOption} options={options} selected-value={selectedValue} label="Single Select Pick List"></c-multi-select-pick-list>
+        </div>
+    </lightning-card>
+    </template>
+    <template if:true={togglebutton}>
+        <div class="slds-p-horizontal_small"> 
+            <c-multi-select-pick-list multi-select="true" onselectoption={handleSelectOptionList} options={options} selected-values={selectedValueList} label="multiSelect Pick List"></c-multi-select-pick-list>
+        </div>
+        </template>
+</template>

@@ -1,0 +1,15 @@
+<template>
+    <div>
+        <div>Name :{Name}</div>
+        <div>Company : {Company}</div>
+        <div>Salary : {Salary}</div>
+    </div>
+    <lightning-card title="jQueryDemo">
+        <lightning-button variant="brand" label="Click Me" title="click Me" onclick={greetingHandler} slot="actions"></lightning-button>
+
+        <p class="slds-p-horizontal_small" style="display:none;">
+            Hey! Have an awesome day :)
+        </p>
+    </lightning-card>
+    {itemName}
+</template>

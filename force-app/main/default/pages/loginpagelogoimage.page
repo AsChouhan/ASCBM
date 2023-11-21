@@ -1,0 +1,5 @@
+<apex:page >
+    <div class="circular--portrait" >
+        <apex:image url="{!$Resource.BriskMindLogo}" width="50" height="50"/>
+    </div>
+</apex:page>

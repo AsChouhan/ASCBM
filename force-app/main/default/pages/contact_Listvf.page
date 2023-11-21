@@ -1,0 +1,15 @@
+<apex:page controller="contact_List_controller">
+    
+    <apex:form >
+    <apex:pageBlock title="Contact list " id="con_id" >
+     <apex:dataList value="{!Contacts}" rendered="true" var="con" style="border-style:solid"   >
+         <apex:outputLabel value="{!con.name}" >  </apex:outputLabel>
+        </apex:dataList>   
+        <apex:commandButton action="{!Last}" value="Last Page" reRender="con_id" disabled="{!NO_Next}" /> &nbsp;&nbsp;
+        <apex:commandButton action="{!previous}" value="Prev" reRender="con_id" disabled="{!NO_Prev}" /> &nbsp;&nbsp;
+        <apex:commandButton action="{!Next}" value="Next" reRender="con_id" disabled="{!NO_Next}" /> &nbsp;&nbsp;
+        <apex:commandButton action="{!First}" value="First page" reRender="con_id" disabled="{!NO_prev}" />&nbsp;&nbsp;
+     pages:   <apex:outputText value="{!totalPages}"  ></apex:outputText>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

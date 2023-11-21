@@ -1,0 +1,78 @@
+<apex:page controller="BMT_getAllSobjectDataAndFields" sidebar="false" showHeader="false">
+	<apex:form id="frm">
+		<apex:actionFunction name="fetchField" action="{!fetchFields}" reRender="frm"></apex:actionFunction>
+		<!-- ********************************** All Objects Block ************************************************** -->
+		<apex:pageBlock id="pb1" title="All Objects">
+			<apex:pageMessages />
+			<apex:pageBlockSection >
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="Select Object :-" style="font-weight:bold;font-size=50%"></apex:outputLabel>
+					<apex:selectList size="1" value="{!selectedObject}" onchange="fetchField();return false;">
+						<apex:selectOptions value="{!allObjects}"></apex:selectOptions>
+					</apex:selectList>
+				</apex:pageBlockSectionItem>
+				<apex:pageBlockSectionItem >
+					<apex:commandButton value="Reset" action="{!doReset}" reRender="frm" status="actStatusId"></apex:commandButton>
+				</apex:pageBlockSectionItem>
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+		<!-- ********************************** All Fields Block ************************************************** -->
+		<apex:outputPanel rendered="{!fieldPanel}">
+			<apex:pageBlock id="pb2" title="All fields">
+				<apex:pageBlockSection >
+					<apex:panelGrid columns="4">
+						<!-- ********************************** Available Fields Options ******************************* -->
+						<apex:panelGroup >
+							<apex:outputLabel value="{!selectedObject} : Fields" style="font-weight:bold;font-size=50%"></apex:outputLabel>
+							<apex:selectList multiselect="true" style="Width:200px;height:200px;" value="{!addElement}">
+								<apex:selectOptions value="{!nonSelectedPicklist}"></apex:selectOptions>
+							</apex:selectList>
+						</apex:panelGroup>
+						<!-- ********************************** ADD / Remove Buttons ******************************* -->
+						<apex:panelGroup >
+							<br/>
+							<br/>
+							<br/>
+							<apex:commandButton value="Add" action="{!doAddElement}" reRender="frm" status="actStatusId"></apex:commandButton>
+							<br/>
+							<br/>
+							<br/>
+							<apex:commandButton value="Del" action="{!doDelElement}" reRender="frm" status="actStatusId"></apex:commandButton>
+						</apex:panelGroup>
+						<!-- ********************************** Selected Fields Options ******************************* -->
+						<apex:panelGroup >
+							<apex:outputLabel value="Selected : Fields" style="font-weight:bold;font-size=50%"></apex:outputLabel>
+							<apex:selectList multiselect="true" style="Width:200px;height:200px;" value="{!removeElement}">
+								<apex:selectOptions value="{!SelectedPicklist}"></apex:selectOptions>
+							</apex:selectList>
+						</apex:panelGroup>
+						<apex:panelGroup >
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							
+							<apex:commandButton value="Process" action="{!doProcess}" disabled="{!disbaledProcessButton}" reRender="frm" status="actStatusId"></apex:commandButton>
+							<apex:actionstatus id="actStatusId">
+								<apex:facet name="start">
+									<div class="waitingSearchDiv" id="el_loading" style="background-color: #DCD6D6;
+                                        height: 200%;opacity:0.65;width:100%;">
+										<div class="waitingHolder" style="top: 74.2px; width: 60px;">
+											<img class="waitingImage" src="/img/loading.gif" title="Please Wait..." /> <span class="waitingDescription">Processing.....</span>
+										</div>
+									</div>
+								</apex:facet>
+							</apex:actionstatus>
+						</apex:panelGroup>
+					</apex:panelGrid>
+				</apex:pageBlockSection>
+			</apex:pageBlock>
+		</apex:outputPanel>
+		<!-- ****************************************** Pagination Component ******************************************* -->
+		<apex:pageBlock id="PagComID" rendered="{!paginationPanel}">
+			<c:BMT_PaginationVFComponent id="cmp" Objectname="{!selectedObject}" Fields="{!fields}"></c:BMT_PaginationVFComponent>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

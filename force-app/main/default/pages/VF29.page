@@ -1,0 +1,16 @@
+<apex:page standardController="Account">
+    <apex:form >
+        <apex:pageBlock title="Account Name" tabStyle="Opportunity" mode="Edit">
+    <apex:pageBlockSection >
+        <apex:pageBlockSection >
+            <apex:CommandButton action="save" value="save"/>
+               </apex:pageBlockSection>
+        <apex:pageBlockSection title="my contact Section" columns="2"/>
+        <apex:inputField value="{!account.name}"/>
+        <apex:inputField value="{!account.site}"/>
+        <apex:inputField value="{!account.type}"/>
+        <apex:inputField value="{!account.accountNumber}"/>	
+               </apex:pageBlockSection>
+            </apex:pageBlock> 
+        </apex:form>
+</apex:page>

@@ -1,0 +1,49 @@
+<template>
+    <div style="background-color: white; max-height: fit-content;">
+        <template lwc:if={recordId}>
+            <div class="child1">
+                <h1 class="h1"><b>Custom Account</b></h1><hr/>
+                <c-child-Account accountid={recordId}></c-child-Account><hr/>
+                <h1 class="h1"><b>Custom Contact</b></h1><hr/>
+
+                <c-child-Contact accountid={recordId}></c-child-Contact><hr/>
+                <h1 class="h1"><b>Custom Case</b></h1><hr/>
+
+                <c-child-Case accountid={recordId}></c-child-Case><hr/>
+                <h1 class="h1"><b>Custom Contract</b></h1><hr/>
+
+                <c-child-Contract accountid={recordId}></c-child-Contract>
+            </div>
+        </template>
+        <footer class="slds-card__footer">
+        <!-- <template lwc:if={enableEdit}>
+                <lightning-button 
+                    variant="brand" 
+                    label="Save" 
+                    title="Save" 
+                    onclick={pressSave}
+                    >
+                </lightning-button>
+        </template>
+        <template lwc:else>
+                <lightning-button 
+                disabled={disableEdit}
+                    variant="destructive-text" 
+                    label="Edit"
+                    title="Edit" 
+                    onclick={pressEdit}
+                    >
+                </lightning-button> -->
+                <template if:true={hideEdit}>
+                    <div class="slds-clearfix">
+                        <lightning-button class="slds-float_right slds-m-left_x-small" disabled={disableEdit} variant="brand" label="Edit" title="Primary action" onclick={pressEdit}></lightning-button>
+                    </div>
+                </template>
+                <template if:true={hideSave}>
+                    <div class="slds-clearfix">
+                        <lightning-button class="slds-float_right slds-m-left_x-small" variant="brand" label="Save" title="Primary action" onclick={pressSave}></lightning-button>
+                    </div>
+                </template> 
+    </footer>
+    </div>
+</template>

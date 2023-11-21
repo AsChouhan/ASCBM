@@ -1,0 +1,17 @@
+<apex:page standardController="Merchandise__c" recordSetVar="Record">
+    <apex:pageBlock title="Merchandise">
+        <apex:form >
+        <apex:dataList value="{!Record}" var="list">
+            <apex:commandLink rerender="ten">
+                {!list.Name__c}
+                <apex:param name="min" value="{!list.id}"/>
+            </apex:commandLink>
+         </apex:dataList>
+      </apex:form>
+</apex:pageBlock>       
+  <apex:pageBlock title="Record detail">
+      <apex:outputPanel id="ten">
+         <apex:detail subject="{!$CurrentPage.parameters.min}" relatedList="false" title="false"/>
+      </apex:outputPanel>        
+    </apex:pageBlock>
+</apex:page>

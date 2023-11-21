@@ -1,0 +1,24 @@
+<apex:page showHeader="false" sidebar="false" controller="Click_me9">
+    <apex:form >
+        <apex:pageBlock >
+            <apex:pageBlockSection >
+                <apex:dataList value="{!One}" var="list" rendered="man">
+                    <apex:outputText value="{!list}"/>
+                </apex:dataList>
+            </apex:pageBlockSection>
+            <apex:commandButton action="{!Click}" value="Click"/>
+        </apex:pageBlock> 
+    </apex:form>
+    
+    <apex:form >
+        <apex:pageBlock >
+            <apex:pageBlockSection >
+                <apex:dataList id="man" value="{!Second}" var="list">
+                    <apex:outputText value="{!list}">
+                    </apex:outputText>   
+                </apex:dataList>
+            </apex:pageBlockSection>
+            <apex:commandButton />
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

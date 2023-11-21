@@ -1,0 +1,17 @@
+<apex:page controller="Account_apex">
+    <apex:form >
+        <apex:pageBlock >
+            <apex:pageBlockSection >
+                <apex:inputField value="{!a.Name}"/>
+                <apex:inputField value="{!a.Industry}"/>
+                <apex:inputField value="{!a.Rating}"/>
+                <apex:outputText value="{!a.Id}"/>
+            </apex:pageBlockSection>     
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!save}" value="save"/>
+                <apex:commandButton action="{!Qucike_save}" value="Qucike save"/>
+                <apex:commandButton action="{!del}" value="Delete"/>
+                    </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

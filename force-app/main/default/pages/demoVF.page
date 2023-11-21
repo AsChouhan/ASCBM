@@ -1,0 +1,29 @@
+<apex:page controller="democlass">
+    <apex:form > 
+        <apex:pageBlock >
+            <apex:pageBlockSection columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputlabel value="Object Names :"/> 
+                    <apex:actionRegion >      
+                        <apex:selectList value="{!selectedObj}" size="1">
+                            <apex:selectOptions value="{!ObjList}"/>
+                            <apex:actionSupport event="onchange" rerender="objFields"/>
+                        </apex:selectList>
+                    </apex:actionRegion>                         
+                </apex:pageBlockSectionItem>
+                 
+                <apex:pageBlockSectionItem >
+                    <apex:outputlabel value="Field Names :"/>   
+                    <apex:outputPanel id="objFields">   
+                        <apex:actionRegion >  
+                            <apex:selectList value="{!selectedField}" size="1">
+                                <apex:selectOptions value="{!ObjectFields}"/>
+                            </apex:selectList>
+                        </apex:actionRegion>      
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                 
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

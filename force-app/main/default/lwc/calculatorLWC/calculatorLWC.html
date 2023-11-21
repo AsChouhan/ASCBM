@@ -1,0 +1,91 @@
+<template>
+    <lightning-card icon-name="standard:account" variant="base">
+        <div slot="title">
+            Calculator
+        </div>
+        <div class="slds-box slds-theme_shade box">
+            <lightning-input type="text" value={inputValue}></lightning-input>
+            <br />
+            <lightning-input type="text" value={resultValue}></lightning-input>
+            <br />
+            <br />
+            <div class="slds-box">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_1-of-4">
+                        <lightning-button variant="brand-outline" label="1" title="Non-primary action" onclick={handleClick}
+                            class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <lightning-button variant="brand-outline" label="2" title="Non-primary action" onclick={handleClick}
+                            class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <lightning-button variant="brand-outline" label="3" title="Non-primary action" onclick={handleClick}
+                            class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <lightning-button variant="brand" label="+" title="Non-primary action" onclick={handleClick}
+                           class="slds-m-left_x-small" ></lightning-button>
+                    </div>
+                </div>
+                <br/>
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_1-of-4">
+                        <lightning-button variant="brand-outline" label="4" title="Non-primary action" onclick={handleClick}
+                            class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <lightning-button variant="brand-outline" label="5" title="Non-primary action" onclick={handleClick}
+                            class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <lightning-button variant="brand-outline" label="6" title="Non-primary action" onclick={handleClick}
+                            class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <lightning-button variant="brand" label="-" title="Non-primary action" onclick={handleClick}
+                            class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </div>
+                <br/>
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_1-of-4">
+                        <lightning-button variant="brand-outline" label="7" title="Non-primary action" onclick={handleClick}
+                            class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <lightning-button variant="brand-outline" label="8" title="Non-primary action" onclick={handleClick}
+                            class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <lightning-button variant="brand-outline" label="9" title="Non-primary action" onclick={handleClick}
+                            class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <lightning-button variant="brand" label="*" title="Non-primary action" onclick={handleClick}
+                            class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </div>
+                <br/>
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_1-of-4">
+                        <lightning-button variant="brand-outline" label="CLR" title="Non-primary action" onclick={clear}
+                            class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <lightning-button variant="brand-outline" label="0" title="Non-primary action" onclick={handleClick}
+                            class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <lightning-button variant="success" label="=" title="Non-primary action" onclick={getResult}
+                            class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <lightning-button variant="brand" label="/" title="Non-primary action" onclick={handleClick}
+                            class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,29 @@
+<aura:component controller="AccountPagination" > 
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" /> 
+     
+    <aura:attribute name="AccountList" type="Account[]"/> 
+    <aura:attribute name="page" type="integer" description="stores page Number"/> 
+    <aura:attribute name="pages" type="integer" description="Display Page Number"/> 
+    <aura:attribute name="total" type="integer" description="Total Number of Records"/> 
+    <aura:attribute name="Account" type="List"/> 
+     
+    <div class="slds-m-around_small"> 
+        <div class="slds-page-header" > 
+             
+            <p class="slds-page-header__title slds-truncate">Total Accounts {!v.total}  <br/> page {!v.page} of {!v.pages}</p> 
+            <ui:inputSelect aura:id="recordSize" label="Records Per Page: " change="{!c.onSelectChange}"> 
+                <ui:inputSelectOption text="10" label="10" value="true"/> 
+                <ui:inputSelectOption text="15" label="15"/> 
+                <ui:inputSelectOption text="20" label="20"/> 
+            </ui:inputSelect> 
+        </div> 
+         
+        <p class="slds-p-horizontal_small slds-box"> 
+            <lightning:datatable data="{!v.AccountList}" columns="{! v.Account }" keyField="id"  /> 
+        </p> 
+        <div class="slds-align_absolute-center">             
+            <lightning:button disabled="{!v.page == 1}" variant="brand" label="Previous Page" onclick="{! c.navigate }" />             
+            <lightning:button disabled="{!v.page == v.pages}" aura:id="previousPage" variant="brand" label="Next Page" onclick="{! c.navigate }" /> 
+        </div> 
+    </div> 
+</aura:component>

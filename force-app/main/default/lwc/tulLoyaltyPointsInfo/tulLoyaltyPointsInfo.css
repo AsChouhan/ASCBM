@@ -1,0 +1,15 @@
+.sectionHeight{
+  height: 90%;
+}
+.tableCss{
+  margin-left: -2%;
+  margin-right: -2%;
+  height: 75%; 
+  /* overflow-y: auto; */
+}
+.optionClass{
+  max-width: max-content;
+}
+.MainDive{
+  overflow:hidden;
+}

@@ -1,0 +1,16 @@
+<apex:page standardController="Merchandise__c">
+    <apex:form >
+    <apex:pageBlock title="Merchandise">
+        <apex:pageBlockButtons >
+        <apex:commandButton action="{!save}" value="save"/>
+        <apex:commandButton action="{!cancel}" value="cancel"/>
+        </apex:pageBlockButtons>
+        <apex:pageBlockSection title="Create Record">
+            <apex:inputField value="{!Merchandise__c.Name__c}"/>
+            <apex:inputField value="{!Merchandise__c.Job_Description__c}"/>
+            <apex:inputField value="{!Merchandise__c.Price__c}"/>
+            <apex:inputField value="{!Merchandise__c.Total_Inventory__c}"/>
+        </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

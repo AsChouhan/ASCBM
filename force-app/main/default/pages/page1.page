@@ -1,0 +1,13 @@
+<apex:page >
+   <apex:pageBlock title="Employe" >
+    tital:
+       
+    </apex:pageBlock>
+    <apex:pageBlock title="new Employe" helpTitle="needHelp??" helpUrl="HelloWorld">
+    help tital
+    </apex:pageBlock>
+    <apex:pageBlock title="Employes" tabStyle="Lead">
+        Employe
+    </apex:pageBlock> 
+    
+</apex:page>

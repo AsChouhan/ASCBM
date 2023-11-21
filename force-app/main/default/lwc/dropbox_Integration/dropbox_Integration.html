@@ -1,0 +1,107 @@
+<template>
+  <lightning-card>
+  <br/>
+
+<template if:true={filesList}>
+  <lightning-breadcrumbs>
+    <template for:each={myBreadcrumbs} for:item="crumbs">
+      <lightning-breadcrumb onclick={handleNavigateTo} key={crumbs.value} label={crumbs.label} name={crumbs.value}></lightning-breadcrumb>
+    </template>
+</lightning-breadcrumbs>
+<br/>
+  <table class="slds-table slds-table_cell-buffer slds-table_bordered" style="border: 1px solid black;
+  border-radius: 10px;">
+    
+    <tbody>
+        <tr>
+            <td><strong>File Name</strong></td>
+            <td><strong>Download</strong></td>
+            <td><strong>Delete</strong></td>
+        </tr>
+      <template for:each={filesList} for:item="file">
+        <tr key={file.id}>
+          <td>
+            <template lwc:if={file.isFolder}>
+              <a key={file.id} id={file.id} name={file.name} data-file-id={file.path_lower} onclick={open} ><lightning-icon icon-name="doctype:folder" size = "small" ></lightning-icon>&nbsp;&nbsp;{file.name}</a>
+          </template> 
+          <template lwc:else>
+              <a key={file.id} id={file.id} onclick={downloadFile} ><lightning-icon icon-name="utility:file" size = "small" ></lightning-icon>&nbsp;&nbsp;{file.name}</a>
+          </template>
+          </td>
+         <!-- <td data-label="Name">
+            <div class=".slds-size_2-of-2">{file.name}</div>
+          </td>-->
+         <!--td><a id={file} href={file.webViewLink} data-file-id={file.path_lower} onclick={open} target="-blank">Open</a></td-->
+
+          
+         <td data-label="Download">
+              <lightning-button-icon 
+                icon-name="utility:download" 
+                onclick={handleDownloadFile} 
+                data-file-id={file.id} 
+                variant="bare" 
+                alternative-text="Download">
+              </lightning-button-icon></a></td>
+
+              <td data-label="Delete">
+              <lightning-button-icon 
+                icon-name="utility:delete" 
+                onclick={handleDeleteFile} 
+                data-file-id={file.id} 
+                variant="bare" 
+                alternative-text="Delete">
+              </lightning-button-icon>
+              </td>
+        </tr>
+      </template>
+    </tbody>
+  </table>
+  <br/>
+  <lightning-file-upload
+        label="Attach receipt"
+        name="fileUploader"
+        accept={acceptedFormats}
+        record-id={myRecordId}
+        onuploadfinished={handleUploadFile}
+        multiple
+    >
+    </lightning-file-upload>
+     <lightning-button variant="brand-outline" label="Create Folder" title="Primary action with lighter look" onclick={showModalBox} class="slds-m-left_x-small"></lightning-button>
+ 
+<!-- modal start -->   
+<template if:true={isShowModal}>
+
+<section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+  <div class="slds-modal__container">
+<!-- modal header start -->
+    <header class="slds-modal__header">
+      <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={hideModalBox}>
+      <lightning-icon icon-name="utility:close"
+        alternative-text="close"
+          variant="inverse"
+          size="small" ></lightning-icon>
+         <span class="slds-assistive-text">Close</span>
+      </button>
+      <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Create Folder</h2>
+    </header>
+<!-- modal body start -->
+<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+  <div class="slds-p-around_medium lgc-bg">
+<lightning-input  type="text" label="Enter Folder Name" value={name}  ></lightning-input>
+</div>
+</div>
+
+<!-- modal footer start-->
+      <footer class="slds-modal__footer">
+        
+      <button class="slds-button slds-button_neutral" onclick={createFolder}>Done</button>
+     
+ </footer>
+          </div>
+        </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+</template>
+<!-- modal end -->
+</template>
+</lightning-card>
+</template>

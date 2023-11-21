@@ -1,0 +1,168 @@
+<apex:component Controller="deepscomponentconroller" allowDML="true">
+    <script type="text/javascript">
+    function recordsDownload(filename, text) {
+        
+        console.log('in csv');
+        console.log(filename);
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        console.log(element);
+        element.setAttribute('download', filename + '.csv');
+        console.log(element);
+        element.style.display = 'none';
+        console.log(element);
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+        console.log(element);        
+    }
+    </script>
+    <script>
+    function eventHandling() {
+        console.log('am in');
+        document.addEventListener("keypress", function (e) {
+            console.log(e.keyCode);
+            if (e.keyCode === 13 || e.which === 13) {
+                event.preventDefault();
+                pageJumping();
+            }
+        });
+    }
+    </script>   
+    <script  type="text/javascript">
+    
+    function handleMasterCheckbox(){
+        var inputcheckbox=document.getElementsByClassName('ChildCheckBox');
+        var masterc = document.getElementsByClassName('MasterCheckBox');
+        var counter=0;
+        for(var i=0; i < inputcheckbox.length;i++){
+            if(inputcheckbox[i].checked == true){
+                counter++;
+            }
+        }
+        if(counter == inputcheckbox.length){
+            masterc[0].checked = true;  
+        }else{
+            masterc[0].checked = false;
+        }   
+    }    
+    
+    function masterCheck(){
+        console.log('hi am in');
+        var mastercheckbox = document.getElementsByClassName("MasterCheckBox")[0];
+        var childCheckbox = document.getElementsByClassName("ChildCheckBox");
+        console.log(mastercheckbox);
+        console.log(childCheckbox);
+        if(mastercheckbox.checked){
+            console.log('in master');
+            for(var i = 0 ; i < childCheckbox.length; i++){
+                childCheckbox[i].checked = true;
+            }
+        }
+        else{
+            console.log('in else');
+            for( i = 0 ; i < childCheckbox.length; i++){
+                childCheckbox[i].checked = false;
+            }
+        }
+    }
+    
+    </script>
+    
+    <apex:attribute name="reqObj" type="String" assignTo="{!objectName}" description="return object name" />
+    <apex:attribute name="rcd" type="SelectOption[]" assignTo="{!fieldsSelectOptionList}" description="return records" />
+    <apex:actionFunction name="pageJumping" reRender="componentblock" action="{!showpageNumber}"/>
+    <apex:actionFunction action="{!process}" name="D1" reRender="componentblock" status="pageStatus"/>
+    <apex:pageBlock id="componentblock" rendered="{!componenthide}">
+        <apex:pageMessages id="msg"/>
+        <table width="100%">
+            <tr>
+                <td align="left">
+                    <apex:commandButton value="New Record" action="{!newRecord}"  onclick="this.form.target='_blank'" /> &nbsp;&nbsp;&nbsp;
+                    <apex:commandButton value="Delete Selected" action="{!delSelected}" disabled="{!disableDeleteSelButton}"  rerender="pgtable, msg, componentblock" /> &nbsp;&nbsp;&nbsp;
+                    <apex:commandButton value="Download CSV" action="{!CSVDownload}"  disabled="{!disableCsvButton}" oncomplete="javascript:recordsDownload('{!objectName}','{!csv}');"/> &nbsp;&nbsp;&nbsp;
+                </td>
+                <!--ALPHABET FILTERS-->
+                <apex:variable id="alphabets" var="alpha" value="{!0}" rendered="{!IF(objectName == 'Case' || objectName == 'Solution', false, true)}">
+                    <td align="right">
+                        <apex:repeat value="{!alphabet}" var="alpha">
+                            <apex:commandLink value="{!alpha}" action="{!filterRecords}" style="color: blue;" reRender="pgblock, componentblock, msg">
+                                <apex:param name="alphabets" value="{!alpha}" assignTo="{!selectedAlphabet}" />
+                            </apex:commandLink>
+                            &nbsp;|&nbsp;
+                        </apex:repeat>
+                    </td>
+                </apex:variable>
+            </tr>
+        </table>
+        
+        <!--PAGE BLOCK CONTAINS RECORDS-->
+        <div style="overflow: scroll; width:1350px; max-height: 205px;">
+            <apex:pageBlockSection id="pgblock">
+                
+                <apex:pageBlockTable value="{!allRecords}" rendered="{!hideComponent}" id="pgtable" var="rec" style="width:1350px;">
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:inputCheckbox styleClass="MasterCheckBox" selected="{!rec.recordCheckbox}" onclick="masterCheck()" />
+                        </apex:facet>
+                        <apex:inputCheckbox styleclass="ChildCheckBox" selected="{!rec.recordCheckbox}" onclick="return handleMasterCheckbox();"/>    
+                    </apex:column>
+                    
+                    <apex:column headervalue="Action">
+                        <apex:commandLink value="Edit" action="{!editRecord}" target="_blank" style="color: blue;">
+                            <apex:param name="openEditPage" value="{!rec.recordsOfObject.id}" assignTo="{!editRecordId}" />
+                        </apex:commandLink> &nbsp; | &nbsp;
+                        <apex:commandLink value="Del" action="{!del}" target="_blank" style="color: blue;" reRender="pgblock, msg" status="pagestatus">
+                            <apex:param name="deleterecord" value="{!rec.recordsOfObject.id}" />
+                        </apex:commandLink>
+                    </apex:column>
+                    
+                    <apex:repeat value="{!fieldsSelectOptionList}" var="fld">
+                        <apex:column value="{!rec.recordsOfObject[fld.value]}">
+                            <apex:facet name="header">
+                                <apex:commandLink value="{!fld.label}" action="{!columnSorting}" reRender="pgtable, pgblock">
+                                    <apex:param name="sortField" value="{!fld.value}" assignTo="{!sortingFieldName}" />
+                                </apex:commandLink>
+                            </apex:facet>
+                        </apex:column>
+                    </apex:repeat>
+                    
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+        </div>
+        
+        
+        <table width="100%">
+            <tr>
+                <td>
+                    <apex:outputPanel >
+                        <apex:outputLabel value="Page: {!pageNumber} of {!CEILING (ssc.ResultSize / ssc.PageSize)}" />
+                    </apex:outputPanel>
+                </td>
+                <td>
+                    Page Size:
+                    <apex:selectList value="{!recordSize}" size="1">
+                        <apex:selectOptions value="{!recordSizePerPage}" />
+                        <apex:actionSupport event="onchange" action="{!pageSize}" status="pageStatus" reRender="componentblock">
+                        </apex:actionSupport>
+                    </apex:selectList>
+                    
+                </td>
+                
+                <td>
+                    <apex:outputPanel id="btn">
+                        <apex:commandButton value="First" action="{!First}" status="pageStatus" rerender="componentblock" disabled="{!!ssc.hasPrevious}"/>
+                        <apex:commandButton value="Previous" action="{!Previous}" status="pageStatus" rerender="componentblock" disabled="{!!ssc.hasPrevious}"/>
+                        <apex:commandButton value="Next" action="{!Next}" status="pageStatus" rerender="componentblock" disabled="{!!ssc.hasNext}"/>
+                        <apex:commandButton value="Last" action="{!Last}" status="pageStatus" rerender="componentblock" disabled="{!!ssc.hasNext}"/>
+                    </apex:outputPanel>
+                </td>
+                <td align="right">
+                    Page
+                    <apex:inputtext value="{!pageNumber}" style="width:2%" onkeypress="eventHandling()"/>
+                    of {!CEILING(ssc.ResultSize / ssc.pageSize)}
+                </td>
+            </tr>
+        </table>
+    </apex:pageBlock>
+</apex:component>

@@ -1,0 +1,159 @@
+<apex:component controller="BMT_PaginationComponentClass" allowDML="true">
+    
+    <apex:attribute name="Objectname" type="String" description="Selected object" assignTo="{!objname}" />
+	<apex:attribute name="Fields" type="String[]" description="Selected object's fields" assignTo="{!fieldsname}" />
+    
+    <apex:actionFunction name="changePageSizeFunction" action="{!changePageSize}" reRender="pb3"></apex:actionFunction>
+	<apex:actionFunction name="changePageNumberFunction" action="{!changePageNumber}" reRender="pb3"></apex:actionFunction>
+    
+    <!-- ********************************** Selected Objects and Fields Block ******************************* -->
+	<apex:pageBlock title="Objects Records" id="pb3">
+		<apex:pageMessages ></apex:pageMessages>
+		<!-- ************* New Record, Delete Selected, Download CSV AND Alphabates Sorting Block ********** -->
+		<table style="width:100%;">
+			<tr>
+				<td>
+					<apex:commandButton value="New Record" action="{!doNewRecordPopUp}"></apex:commandButton>&nbsp;
+					<apex:commandButton value="Delete Selected" action="{!doDeleteSelectedRecord}" status="paginationStatus" reRender="pb3"></apex:commandButton>&nbsp;
+					<apex:commandButton value="Download CSV" action="{!downloadCSV}" oncomplete="createcsv('{!CSVFile}')" reRender="pb3" status="paginationStatus"></apex:commandButton>&nbsp;</td>
+				<td align="right">
+					<h2><apex:repeat value="{!allAlphabet}" var="alpha">
+                            <apex:commandLink value="{!alpha} |" action="{!charRecShow}" style="color:#015ba7;" reRender="pb3" status="paginationStatus" >
+                                <apex:param name="param" value="{!alpha}" assignTo="{!alphaSearchConct}" />
+                            </apex:commandLink>
+                        </apex:repeat> </h2>
+				</td>
+			</tr>
+		</table>
+		<div style="overflow: scroll; width: 100%; max-height: 300px">
+			<apex:pageBlockTable value="{!records}" var="data" id="table" columnsWidth="50px">
+				<apex:column >
+					<apex:facet name="header">
+						<apex:inputCheckbox onclick="selectAllCheckboxes(this,'childcb')" value="{!headerCheck}" styleClass="inputMaster" id="mastercb" /></apex:facet>
+					<apex:inputCheckbox value="{!data.isCheck}" id="childcb" styleClass="inputId" onclick="return deselectMasterCheckbox();"></apex:inputCheckbox>
+				</apex:column>
+                
+                <!-- ************** Edit And Delete Link ********************* -->
+				<apex:column headerValue="Action">
+					<apex:commandLink value="Edit |" action="{!doEdit}" style="color:#015ba7;">
+						<apex:param name="EditId" value="{!data.objectRecords.id}" assignTo="{!retrieveId}"></apex:param>
+					</apex:commandLink>&nbsp;
+					<!-- <apex:outputLink value="/{!data.objectRecords.Id}/e?" style="color:#015ba7;">Edit |</apex:outputLink> -->
+					<!-- <apex:outputLink value="{!URLfor($action[selectedObject].delete ,records.objectRecords.id)}" style="color:#015ba7;"> Delete</apex:outputLink> -->
+					<apex:commandLink value="Delete" action="{!doDelete}" style="color:#015ba7;" status="paginationStatus" reRender="pb3">
+						<apex:param name="DeleteId" value="{!data.objectRecords.id}" assignTo="{!retrieveId}"></apex:param>
+					</apex:commandLink>
+				</apex:column>
+				<apex:repeat value="{!fieldsname}" var="f">
+					<apex:column value="{!data.objectRecords[f]}">
+						<apex:facet name="header">
+							<apex:commandLink value="{!f}{!IF(f==sortFieldName,IF(sortExp='ASC','▼','▲'),'')}" action="{!doSortField}" reRender="table" status="paginationStatus">
+								<apex:param name="sortField" value="{!f}" assignTo="{!sortFieldName}"></apex:param>
+							</apex:commandLink>
+						</apex:facet>
+					</apex:column>
+				</apex:repeat>
+            </apex:pageBlockTable>
+            <div style="text-align: center;color: red;">
+                <apex:outputText value="No record display" rendered="{!!paginationCheck}"> </apex:outputText>
+            </div>
+           
+		</div>
+        
+        <!-- *****************************************Pagination Block ******************************************* -->
+		<apex:pageBlockSection columns="3" rendered="{!paginationCheck}">
+			<apex:pageBlockSectionItem >
+				<apex:outputPanel >
+					<apex:selectList value="{!pgSize}" size="1" onchange="changePageSizeFunction();return false">
+						<apex:selectOption itemLabel="5" itemValue="5"></apex:selectOption>
+						<apex:selectOption itemLabel="7" itemValue="7"></apex:selectOption>
+						<apex:selectOption itemLabel="10" itemValue="10"></apex:selectOption>
+						<apex:selectOption itemLabel="12" itemValue="12"></apex:selectOption>
+					</apex:selectList>
+				</apex:outputPanel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputPanel >
+					<apex:commandButton value="First" action="{!firstPage}" reRender="pb3" disabled="{!!setCon.hasPrevious}" status="paginationStatus"></apex:commandButton>
+					<apex:commandButton value="Previous" action="{!prevPage}" reRender="pb3" disabled="{!!setCon.hasPrevious}" status="paginationStatus"></apex:commandButton>
+					<apex:commandButton value="Next" action="{!nextPage}" reRender="pb3" disabled="{!!setCon.hasNext}" status="paginationStatus"></apex:commandButton>
+					<apex:commandButton value="Last" action="{!lastPage}" reRender="pb3" disabled="{!!setCon.hasNext}" status="paginationStatus"></apex:commandButton>
+				</apex:outputPanel>
+				<apex:actionStatus id="paginationStatus">
+					<apex:facet name="start">
+						<div class="waitingSearchDiv" id="el_loading" style="background-color: #DCD6D6;
+                            height: 300%;opacity:0.65;width:100%;">
+							<div class="waitingHolder" style="top: 100.2px; width: 91px;">
+								<img class="waitingImage" src="/img/loading.gif" title="Please Wait..." /> <span class="waitingDescription">Processing.....</span>
+							</div>
+						</div>
+					</apex:facet>
+				</apex:actionStatus>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputPanel >
+					<apex:inputText value="{!pgNum}" onchange="changePageNumberFunction();return false" />: of {!totalPages}</apex:outputPanel>
+			</apex:pageBlockSectionItem>
+		</apex:pageBlockSection>
+	</apex:pageBlock>
+    
+    <!-- ********************************************* Edit Record List ********************************************** -->
+	<apex:outputPanel rendered="{!editRecordList}">
+		<apex:pageBlock title="{!objname} Information" id="editpb">
+			<div style="overflow: scroll; width: 100%; max-height: 300px">
+				<apex:pageBlockTable value="{!tempObjectList}" var="data">
+					<apex:repeat value="{!fieldsname}" var="f">
+						<apex:column headerValue="{!f}">
+							<apex:inputField value="{!data[f]}" /></apex:column>
+					</apex:repeat>
+				</apex:pageBlockTable>
+			</div>
+			<apex:pageBlockButtons location="Bottom">
+				<apex:commandButton action="{! doSave}" value="Save" status="paginationStatus"></apex:commandButton>
+			</apex:pageBlockButtons>
+		</apex:pageBlock>
+	</apex:outputPanel>
+    
+    <!-- ********************************************* Java Script and CSS Style  **********************************************  -->
+	<script type="text/javascript">
+		//------------------- SELECT ALL CHECKBOXES ----------------------------------------------
+			        function selectAllCheckboxes(obj,receivedInputID){
+			            var inputCheckBox = document.getElementsByTagName("input");
+			            console.log(inputCheckBox);                  
+			            for(var i=0; i<inputCheckBox.length; i++){          
+			                if(inputCheckBox[i].id.indexOf(receivedInputID)!=-1){                                     
+			                    inputCheckBox[i].checked = obj.checked;
+			                }
+			            }
+			        }
+
+                    function createcsv(csv1){
+                        if(csv1.length === 0){
+                            console.log('Null');
+                        }else{
+                            var downloadcsv = document.createElement('a');
+                            downloadcsv.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv1);
+                            downloadcsv.target = '_blank';
+                            downloadcsv.download = '{!objname}.csv';
+                            downloadcsv.click();
+                        }       
+                    }
+
+
+                    function deselectMasterCheckbox(){
+                        var inputcheckbox=document.getElementsByClassName('inputId');
+                        var master = document.getElementsByClassName('inputMaster');
+                        var counter=0;
+                        for(var i=0; i < inputcheckbox.length;i++){
+                            if(inputcheckbox[i].id.indexOf("childcb")!=-1 && inputcheckbox[i].checked == true){
+                                counter++;
+                            }
+                        }
+                        if(counter == inputcheckbox.length){
+                            master[0].checked = true;  
+                        }else{
+                            master[0].checked = false;
+                        }   
+					}
+	</script>
+</apex:component>

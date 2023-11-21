@@ -1,0 +1,34 @@
+<template>
+   <lightning-card>
+    <lightning-button label="NeuCoins" variant="brand-outline" class="slds-var-m-left_x-small" onclick={openModal2}></lightning-button>
+    &nbsp;
+    <lightning-button label="CliQ Cash Statement" variant="brand-outline" class="slds-var-m-left_x-small" onclick={openModal2}></lightning-button>
+    &nbsp;   
+</lightning-card> 
+   <template if:true={showConsent}>
+    <!-- Modal/Popup Box LWC starts here -->
+    <section aria-describedby="modal-content-id-1" aria-labelledby="modal-heading-01" aria-modal="true" class="slds-modal slds-fade-in-open slds-modal_small" role="dialog" tabindex="-1">
+        <div class="slds-modal__container slds-modal__container1">
+            <!-- Modal/Popup Box LWC header here -->
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                    <lightning-icon icon-name="utility:close"
+                        variant="inverse"
+                        size="small" ></lightning-icon>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+            </header>
+            <!-- Modal/Popup Box LWC body starts here -->
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                <lightning-button label="Show Personal Details" title="Toggle content action"  onclick={showClickCashDetails}>
+                </lightning-button><lightning-helptext content="Click on button to show Details"></lightning-helptext><br/><br/>
+                <b>By clicking on "View Personal Details" I am agreeing to TUL's<br/> data security rules for not disclosing or sharing this<br/> information with anyone outside the organization.</b> 
+            </div>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>
+<template if:true={showLoyaltyFlag}>
+                <c-tul-loyalty-points-info onbhawani={closeModal} get-id-from-parent={recordId}></c-tul-loyalty-points-info> 
+</template>
+</template>

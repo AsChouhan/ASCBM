@@ -1,0 +1,7 @@
+<apex:page >
+    <apex:pageBlock title="Student">
+    <apex:pageBlockSection title="Student1">
+    I Am a Student
+    </apex:pageBlockSection>
+        </apex:pageBlock>
+</apex:page>

@@ -1,0 +1,147 @@
+<apex:component controller="ComponentController" allowDML="true">
+<!-- ********************************************* Java Script and CSS Style  *******************************************************************************************-->    
+    <script>
+//************************************************SELECT ALL CHECKBOXES************************************************************************************************//
+    function selectAllCheckboxes(obj,receivedInputID){
+        var inputCheckBox = document.getElementsByTagName("input");                  
+        for(var i=0; i<inputCheckBox.length; i++){          
+            if(inputCheckBox[i].id.indexOf(receivedInputID)!=-1){                                     
+                inputCheckBox[i].checked = obj.checked;
+            }
+        }
+    }
+    function deselectMasterCheckbox(){
+        var inputcheckbox=document.getElementsByClassName('inputId');
+        var master = document.getElementsByClassName('inputMaster');
+        var counter=0;
+        for(var i=0; i < inputcheckbox.length;i++){
+            if(inputcheckbox[i].id.indexOf("childcb")!=-1 && inputcheckbox[i].checked == true){
+                counter++;
+            }
+        }
+        if(counter == inputcheckbox.length){
+            master[0].checked = true;  
+        }else{
+            master[0].checked = false;
+        }   
+    }
+   
+    function createcsv(csv){
+        if(csv.length === 0){
+            console.log('Null');
+        }else{
+            var downloadcsv = document.createElement('a');
+            downloadcsv.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+            downloadcsv.target = '_blank';
+            downloadcsv.download = '{!objectName}.csv';
+            downloadcsv.click();
+        }       
+    }
+    function myFunction() {
+          alert('Delete Record successfully');
+    }
+   
+    </script>
+    <style>
+        .dataCol  {
+        width:100%!important;
+        }
+    </style> 
+    
+<!-- ***************************************** Selected Objects and Fields Block ******************************************************************************** -->
+
+  <!--  <apex:pageMessages ></apex:pageMessages>-->
+    <apex:attribute name="button" type="String" assignTo="{!objectName}" description="Array to store N number of Accounts."/>
+    <apex:attribute name="Field" type="SelectOption[]" assignTo="{!SelectedFieldOptions}" description="Array to store N number of Accounts."/>
+    <apex:actionFunction action="{!display}" name="b1" reRender="www"/>
+    
+<!-- ************************************** New Record, Delete Selected, Download CSV AND Alphabates Sorting Block **************************************************** -->
+    <apex:pageBlock id="www" rendered="{!componenthide}">
+        <table width="100%">
+            <tr>
+                <td align="left">
+                    <apex:commandButton action="{!newRecord}" value=" NewRecord" onclick="this.form.target='_blank'"/>
+                    <apex:commandButton action="{!DeleteSelected}" value="DeleteSelected" reRender="tableref" status="pageStatus"  onclick="setTimeout(myFunction, 3000)"/>
+                    <apex:commandButton action="{!downloadCSV}" value="downloadCSV" oncomplete="createcsv('{!CSVFile}')" reRender="www"/>
+                </td>
+                <td align="right">
+                    
+<!--********************************************************Alphabet Filter***************************************************************************************************-->
+                    <h2><apex:repeat value="{!allAlphabet}" var="alpha" >
+                        <apex:commandLink value="{!alpha}" action="{!filterRecord}" style="color:#015ba7;" reRender="www" status="pageStatus" oncomplete="deselectMasterCheckbox();">
+                            <apex:param name="param" value="{!alpha}" assignTo="{!selectedAlphabet}"  />
+                        </apex:commandLink>
+                        &nbsp;|&nbsp;
+                        </apex:repeat> </h2>
+                </td>
+            </tr>	
+        </table>
+        <apex:outputPanel >
+            
+<!-- ****************************************** Edit And Delete Link, Record Table, Check Box **************************************************8***************** -->
+
+            <div style="overflow: scroll;height: 200px;">
+                <apex:pageBlockSection columns="1"  id="tableref" >
+                    <apex:pageBlockTable value="{!myList}" var="list">
+                        <apex:column >
+                            
+                            <apex:facet name="header" >
+                                <apex:inputCheckbox onclick="selectAllCheckboxes(this,'childcb')" value="{!headerCheck}" styleClass="inputMaster" id="mastercb" /></apex:facet>
+                            <apex:inputCheckbox value="{!list.isCheck}" id="childcb" styleClass="inputId" onclick="return deselectMasterCheckbox();"></apex:inputCheckbox>
+                        </apex:column>
+                        
+                        <apex:column headerValue="Action">
+                            <apex:outputLink title="" value="/{!list.NestObj.id}/e?retURL=/apex/{!$CurrentPage.Name}" style="color:#015ba7;" >Edit</apex:outputLink>&nbsp;|&nbsp;
+                           <apex:commandLink value="Delete" action="{!doDelete}" style="color:#015ba7;" status="pageStatus" reRender="www" >
+						<apex:param name="DeleteId" value="{!list.NestObj.id}" assignTo="{!retrieveId}"></apex:param>
+					</apex:commandLink>
+                        </apex:column>
+                        
+                        <apex:repeat value="{!listIteration}" var="itr"> 
+                            <apex:column value="{!list.nestObj[itr]}"> 
+                                <apex:facet name="header"> 
+                                    <apex:commandLink value="{!itr}" action="{!doSortField}" status="pageStatus" reRender="www" oncomplete="selectAllCheckboxes(this,'childcb');deselectMasterCheckbox();"> 
+                                        <apex:param value="{!itr}" name="k" assignTo="{!sortFieldName}"/> 
+                                        <apex:outputLabel value="{!IF(sortFieldName==itr, IF(SortExp == 'ASC', '▲', '▼'), '')}" /> 
+                                    </apex:commandLink> 
+                                </apex:facet> 
+                            </apex:column> 
+                        </apex:repeat>
+                    </apex:pageBlockTable>                   
+                </apex:pageBlockSection>
+            </div>
+        </apex:outputPanel>
+ <!--**************************************************************pagination buttons-***************************************************************-->
+        <apex:pageBlockSection id="bottomPanel">
+            
+            <apex:panelGrid columns="3" width="100%">
+                <apex:outputPanel >
+                    <apex:outputLabel value="Page: {!pageNumber} of {!TotalPages}" />
+                </apex:outputPanel>
+         
+                <apex:outputPanel >
+                    
+                    <div style="width:100%;text-align:center;">
+                        <apex:commandButton action="{!First}" value="First page" status="pageStatus" reRender="www"  disabled="{!disablePageButton}" />&nbsp;&nbsp;
+                        <apex:commandButton action="{!previous}" value="Prev" status="pageStatus" reRender="www" disabled="{!disablePageButton}"/>&nbsp;&nbsp;
+                        <apex:commandButton action="{!Next}" value="Next" status="pageStatus" reRender="www" disabled="{!disableNextPageButton}"/>&nbsp;&nbsp;
+                        <apex:commandButton action="{!Last}" value="Last Page" status="pageStatus" reRender="www" disabled="{!disableLastPageButton}"/>&nbsp;&nbsp;
+                    </div>
+                </apex:outputPanel>
+                <apex:outputPanel >
+                    <div style="width:100%;text-align:end;">
+                        <apex:SelectList value="{!pageSize}" size="1">
+                            record page: <apex:selectOptions value="{!options}"/>
+                            <apex:actionSupport action="{!pageset}" event="onchange" status="pageStatus" reRender="www"/>
+                        </apex:SelectList>
+                    </div>
+                </apex:outputPanel> 
+                <!-- <div align = "right" style="float:right;">
+                    page : <apex:inputText value="{!pageNumber}">
+                        <apex:actionSupport event="onchange" action="{!pagejump}" status="pageStatus" reRender="www"></apex:actionSupport> 
+                        </apex:inputText>
+                </div>--->
+            </apex:panelGrid>           
+        </apex:pageBlockSection> 
+    </apex:pageBlock>
+</apex:component>

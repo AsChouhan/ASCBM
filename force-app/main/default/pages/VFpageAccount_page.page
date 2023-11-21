@@ -1,0 +1,13 @@
+<apex:page controller="VFpageAccount">
+    <apex:form >
+    <apex:pageBlock title="Account">
+    <apex:pageBlockSection >
+        <apex:inputField value="{!acc.name}"/>
+        <apex:inputField value="{!acc.type}"/>
+        </apex:pageBlockSection>
+        <apex:pageBlockButtons >
+        <apex:commandButton action="{!testSave}" value="save"/>
+        </apex:pageBlockButtons>
+    </apex:pageBlock>
+        </apex:form>
+</apex:page>

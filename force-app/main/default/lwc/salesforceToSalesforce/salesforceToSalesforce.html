@@ -1,0 +1,31 @@
+<template>
+    <lightning-card>
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered" style="border: 1px solid black;
+        border-radius: 10px;">
+          <tbody>
+              <tr>
+                  <td><strong>File Name</strong></td>
+                  <td><strong>File Type</strong></td>
+              </tr>
+    </tbody>  
+        <template for:each={ListOfFiles} for:item="files">
+            <tr key={files.Title}>
+                <td>
+                {files.Title}               
+                </td>
+                <td> 
+                    {files.FileType}
+                </td> 
+            </tr>
+        </template>
+    </table>   
+    <lightning-file-upload
+        label="Attach receipt"
+        name="fileUploader"
+        accept={acceptedFormats}
+        record-id={myRecordId}
+        onuploadfinished={handleUploadFile}
+        multiple
+    ></lightning-file-upload> 
+    </lightning-card>
+</template>

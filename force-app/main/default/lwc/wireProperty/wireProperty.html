@@ -1,0 +1,11 @@
+<template>
+    <lightning-card title="Related contacts">
+        <ul>
+            <template for:each={contacts.data} for:item="contact">
+                <li key={contact.Id}>
+                    {contact.FirstName} - {contact.LastName}
+                </li>
+            </template>
+        </ul>
+    </lightning-card>
+</template>

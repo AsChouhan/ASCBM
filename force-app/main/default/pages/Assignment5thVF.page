@@ -1,0 +1,21 @@
+<apex:page standardController="Merchandise__c" recordSetVar="Product">
+    <apex:form >
+        <apex:pageBlock title="Merchandise">
+ 		<apex:pageBlockButtons >
+            <apex:commandButton action="{!save}" value="Update Inventory"/>
+            <apex:commandButton action="{!cancel}" value="cancel"/>
+            </apex:pageBlockButtons> 
+            <apex:pageBlockSection title="Racord List">
+            <apex:pageBlockTable value="{!product}" var="List">
+               <apex:column value="{!List.Name__c}"/>
+               <apex:column value="{!List.Job_Description__c}"/>
+               <apex:column value="{!List.Price__c}"/>
+               <apex:column value="{!List.Total_Inventory__c}"/>
+                <apex:column headerValue="Change Inventory"> 
+                <apex:inputText value="{!List.Total_Inventory__c}"/>
+                </apex:column>
+          </apex:pageBlockTable>
+       </apex:pageBlockSection>
+     </apex:pageBlock>
+   </apex:form>
+</apex:page>

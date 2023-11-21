@@ -1,0 +1,108 @@
+<apex:page Controller="deepspagination"  showHeader="false">
+    <apex:form id="pg1">
+    <!--FIRST PAGE BLOCK SECTION THAT CONTAINS SELECTLIST OF OBJECT AND RESET BUTTON-->
+
+        <!--Print Message-->
+        <apex:pageMessages id="max">
+        </apex:pageMessages>
+
+        <apex:pageBlock id="rerenderId">
+            <apex:pageBlockSection columns="4">
+
+                <!-- FOR OUTPUT LABEL = SELECT OBJECT-->
+                <apex:pageBlockSectionItem dataStyle="width:12%;">
+                    <apex:outputLabel value="Select Object: " style="font-weight:bold; font-size:17px;" />
+                </apex:pageBlockSectionItem>
+                
+                <!--SELECTLIST OF OBJECTS-->
+                <apex:pageBlockSectionItem dataStyle="width:1%;" >
+                    <apex:selectList size="1" value="{!selectedSobject}" style="height:22px; width:232px" >
+                        <apex:selectOptions value="{!objectList}" />
+                        <apex:actionSupport event="onchange"  action="{!retrieveField}" status="pageStatus" reRender="rerenderId,picklist7, pg1, max" />
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+
+                <!-- SPINNER-->
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel >
+                        <apex:actionStatus id="pageStatus">
+                            <apex:facet name="start">
+                                <div style="position:fixed; top:0; bottom: 0; left:0; right:0; zindex:1; opacity:0.25;background-color:black">
+                                <div style="position:fixed; top:0; bottom: 0; left:0; right:0; zindex:2; margin: 30% 50% ">
+                                    <img src="/img/loading32.gif" />
+                                </div>
+                            </div>
+                             </apex:facet>
+                        </apex:actionStatus>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+    
+                <!--RESET BUTTON-->
+                <apex:pageBlockSectionItem >
+                    <apex:commandButton value="Reset" action="{!reset}" rerender="rerenderId, pg1"  status="pageStatus" style="font-size:14px; width:85px; height:25px;" disabled="{!disableReset}"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            
+            <!---SECOND PAGE BLOCK SECTION THAT CONTAINS FIRST FIELD LIST AND SECOND FIELDS LIST AND ALSO CONTAINS ADD, REMOVE AND PROCESS BUTTON.-->
+
+            <apex:pageBlockSection columns="4" rendered="{!showFields}">
+                
+                <!--FOR SHOWING THE NAME OF THE SELECTED OBJECT-->
+                <apex:pageBlockSectionItem id="picklist">
+                    <apex:outputLabel value="{!objFldHeader}" style="font-weight:bold; font-size:14px;"/>
+                </apex:pageBlockSectionItem>
+                
+                <!--SPACE-->
+                <apex:pageBlockSectionItem id="picklist1">
+                    &nbsp;
+                </apex:pageBlockSectionItem>
+                
+                <!--FOR OUTPUT LABEL = SELECTED FIELDS-->
+                <apex:pageBlockSectionItem id="picklist2">
+                    <apex:outputLabel value="Selected Fields" style="font-weight:bold; font-size:14px;"/>
+                </apex:pageBlockSectionItem>
+                
+                <!--SPACE-->
+                <apex:pageBlockSectionItem id="picklist3">
+                    &nbsp;
+                </apex:pageBlockSectionItem>
+                
+                <!--FIRST FIELD LIST-->
+                <apex:pageBlockSectionItem id="picklist4">
+                    <apex:selectList value="{!addFields}" multiselect="true" size="10" style="width:200px;">
+                        <apex:selectOptions value="{!allFieldsListOfObject}" />
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+                
+                <!--ADD & REMOVE BUTTON-->
+                <apex:pageBlockSectionItem id="picklist5">
+                    <apex:pageBlockSection >
+                        <apex:commandButton value="Add" action="{!add}"   style="font-size:14px; width:85px; height:25px;"  status="pageStatus" disabled="{!disableAdd}" reRender="rerenderId, max,  pg1,picklist4, picklist5, picklist6, picklist7"/><br/>
+                        <apex:commandButton value="Remove" action="{!remove}"  style="font-size:14px; width:85px; height:25px;" status="pageStatus"  disabled="{!disableRemoveProcess}" reRender="rerenderId, pg1,picklist4, picklist5, picklist6"/> 
+                    </apex:pageBlockSection>
+                </apex:pageBlockSectionItem>
+                
+                <!--SECOND FIELD LIST-->
+                <apex:pageBlockSectionItem id="picklist6">
+                    <apex:selectList value="{!removeFields}" label="Selected fields"   multiselect="true" size="10" style="width:200px;" >
+                        <apex:selectOptions value="{!selectedFieldsListOfObject}"/>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+                
+                <!--PROCESS BUTTON-->
+                <apex:pageBlockSectionItem id="picklist7" >
+                    <apex:commandButton value="Process" action="{!processB}" reRender="pg1" oncomplete="D1()" status="pageStatus" style="font-size:14px; width:85px; height:25px;" disabled="{!disableRemoveProcess}"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+
+            <!---COMPONENT-->
+           <!-- <apex:pageBlockSection id="pg1">
+                <apex:outputPanel rendered="{!processRender}">                    
+                    <c:deepscomponentcontrollervf reqObj="{!selectedSobject}"  rcd="{!selectedFieldsListOfObject}"/>
+                </apex:outputPanel>
+            </apex:pageBlockSection>-->
+        </apex:pageBlock>
+        <c:deepscomponentcontrollervf reqObj="{!selectedSobject}"  rcd="{!selectedFieldsListOfObject}"/>
+    </apex:form> 
+    <!--JAVASCRIPT FUNCTION -->
+</apex:page>

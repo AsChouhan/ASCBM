@@ -1,0 +1,18 @@
+<apex:page controller="DisplayRecord1" >
+    <apex:form >
+        <apex:pageBlock >
+            <apex:pageBlockSection >
+                <apex:pageBlockTable value="{!acc}" var="list">
+                    <apex:column ><apex:inputfield value="{!list.Name}"/></apex:column>
+                    <apex:column ><apex:inputfield value="{!list.Industry}"/></apex:column>
+                    <apex:column ><apex:inputfield value="{!list.Rating}"/></apex:column>
+                    <apex:column ><apex:inputfield value="{!list.Id}"/></apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!save}" value="save"/>
+                <apex:commandButton action="{!Quick}" value="Quick save"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,39 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+     
+  <!--  <aura:attribute name="var1" type="String"/>
+     <aura:handler name="init" value="{!this}" action="{!c.trmp}" />
+    <aura:attribute name="newAcc" type="Account"
+                    default="{'sobjectType' : 'Account', 'Name' : 'TestAcc1'}"></aura:attribute>
+    <aura:attribute name="listDemo" type="List"
+                    default="['List1','List2','List3']"/>
+    <aura:attribute name="mapdemo" type="map"
+                    default="{a:'map1', b:'map2', c:'map3'}"/>
+    <aura:attribute name="jsObject" type="object"/>
+    <aura:attribute name="userData" type="TestAura.wrapperTest"/>
+    
+    /*  {!v.newAcc.Name} 
+     List Value : {!v.listDemo[1]}
+     
+   
+    
+    map value :{!v.mapdemo.a}
+        <hr/>
+        map length :{!v.mapdemo.b.length}                                                                      }
+        <hr/>
+        jsObject value :{!v.jsObject.name} - {!v.jsObject.Email}
+        <hr/>
+    userData value : {!v.userData.myString1} - {!v.userData.myInteger1}-->
+    
+    <aura:attribute name="message1" type="String"/>
+    <aura:attribute name ="message2" type="String"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    Button1 : {!v.message1}
+    <br/><br/>
+    <lightning:button label="clickme" onclick="{!c.handleClick}"/>
+    <hr/>
+    Button2 : {!v.message2}
+    <br/><br/>
+    <lightning:button label="clickme" onclick="{!c.SecondhandleClick}"/>
+    
+    
+</aura:component>
