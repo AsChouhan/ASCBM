@@ -33,6 +33,7 @@ public class GoogleDriveServiceClass {
         req.setMethod(methodName);
         req.setBody(body);
         req.setTimeout(timeOut);
+        System.debug(req.getBody());
         Http ht = new Http();
         HttpResponse res = ht.send(req);
         return res;

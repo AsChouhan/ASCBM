@@ -1,5 +1,5 @@
 trigger TriggerOnContentDocumentLink on ContentDocumentLink (before insert) {
-    if(trigger.isBefore){
+   /* if(trigger.isBefore){
         set<Id> contactIds = new Set<Id>();
         System.debug(trigger.new.size());
    
@@ -18,5 +18,5 @@ trigger TriggerOnContentDocumentLink on ContentDocumentLink (before insert) {
                 ctl.addError('canUpload');
             }
         }
-    }
+    }*/
 }

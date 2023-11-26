@@ -193,6 +193,8 @@ public class GoogleDriveApexController {
         headerMap.put('content-type','multipart/mixed; boundary="' + boundary + '"');
         headerMap.put('Content-length', String.valueOf(body.length()));      
         HttpResponse res = GoogleDriveServiceClass.getRresponse(methodName, endPoint, headerMap, body, timeOut);
+        System.debug(res.getBody());
+        System.debug(res.getStatus());
     	System.debug(res.getStatusCode());
         if(res.getStatusCode() == 200){
             return 'success';
